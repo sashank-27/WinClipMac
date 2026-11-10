@@ -1,109 +1,101 @@
-# WinClipMac - Windows-style Clipboard Manager for macOS
+# WinClipMac
 
-A native macOS clipboard manager that mimics the Windows clipboard history (Win+V) functionality. Access your clipboard history with a global keyboard shortcut.
+[![Release](https://img.shields.io/github/v/release/sashank-27/WinClipMac?include_prereleases&label=Latest%20Release)](https://github.com/sashank-27/WinClipMac/releases)
+[![License](https://img.shields.io/github/license/sashank-27/WinClipMac)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-macOS%2013%2B-lightgrey)](https://github.com/sashank-27/WinClipMac)
+[![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange)](https://swift.org)
+[![Build](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/sashank-27/WinClipMac/actions)
+
+**Windows-style clipboard manager for macOS** - Press `Cmd+Shift+V` to access your clipboard history, just like `Win+V` on Windows.
 
 ## Features
 
-- **Global Hotkey**: Press `Cmd+Shift+V` to open clipboard history (like Win+V on Windows)
-- **Menu Bar Access**: Click the 📋 icon in the menu bar (right side, near clock)
-- **Clipboard History**: Automatically tracks copied text, images, files, and RTF content
-- **Pin Items**: Pin frequently used items to keep them at the top
-- **Search**: Filter clipboard history in real-time
-- **Persistent Storage**: History survives app restarts
-- **Native macOS App**: Built with Swift and SwiftUI for best performance
+| Feature | Description |
+|---------|-------------|
+| 🎯 **Global Hotkey** | `Cmd+Shift+V` opens clipboard history instantly |
+| 📋 **Menu Bar Access** | Click the 📋 icon in the top-right menu bar |
+| 📝 **Text History** | Automatically captures all copied text |
+| 🖼️ **Image Support** | Screenshots (`Cmd+Shift+Ctrl+4`), copied images from browser/apps |
+| 📁 **File Tracking** | Remembers copied file paths |
+| 📄 **RTF Support** | Preserves rich text formatting |
+| 📌 **Pin Items** | Keep frequently used clips at the top |
+| 🔍 **Real-time Search** | Filter history instantly as you type |
+| ✅ **Copy Confirmation** | Toast notification when item is copied |
+| 💾 **Persistent Storage** | History survives app restarts and reboots |
+| ⚡ **Single-Click Copy** | Click any item to copy to clipboard |
+
+## Quick Start
+
+### Download (Easiest)
+1. Download latest release: [WinClipMac.app.zip](../../releases/latest/download/WinClipMac.app.zip)
+2. Unzip and run (or drag to Applications)
+
+### Build from Source
+```bash
+git clone https://github.com/sashank-27/WinClipMac.git
+cd WinClipMac
+./build.sh
+./run.sh
+```
+
+## First Run Setup
+
+1. **Launch** - App runs in menu bar (no Dock icon)
+2. **Grant Accessibility** (for `Cmd+Shift+V` hotkey):
+   - System Settings → Privacy & Security → Accessibility
+   - Add `WinClipMac` and enable
+3. **Restart** if needed: `pkill WinClipMac && open WinClipMac.app`
+
+## Usage
+
+| Action | Shortcut |
+|--------|----------|
+| Open history | `Cmd+Shift+V` |
+| Open via menu bar | Click 📋 icon |
+| Copy item | Click item |
+| Paste | `Cmd+V` |
+| Pin/Unpin | Hover → 📌 |
+| Delete | Hover → 🗑️ |
+| Search | Type in search box |
+
+## Screenshots
+
+*Menu bar access showing clipboard history with text, images, and files*
 
 ## Requirements
 
 - macOS 13.0 (Ventura) or later
 - Xcode Command Line Tools (for building)
 
-## Building from Source
+## Architecture
 
-```bash
-cd ~/Desktop/WinClipMac
-./build.sh
-```
-
-The app bundle will be created at `.build/release/WinClipMac.app`
-
-## Running
-
-### Option 1: Menu Bar Only Mode (Recommended)
-This runs as a true menu bar app (no Dock icon):
-```bash
-./run.sh
-# OR directly:
-./build/release/WinClipMac
-```
-
-### Option 2: Regular App Mode (Shows in Dock)
-```bash
-./build.sh --run
-# OR
-open .build/release/WinClipMac.app
-```
-
-**Note**: On first launch via `open`, macOS may show a Dock icon briefly. The menu bar only mode (Option 1) is the intended way to run this app continuously in the background.
-
-## Usage
-
-1. **First Launch**: The app will request Accessibility permissions (needed for global hotkey `Cmd+Shift+V`)
-   - Grant it in: System Settings → Privacy & Security → Accessibility
-2. **Copy Content**: Copy any text, image, or file as usual
-3. **Open History**: Press `Cmd+Shift+V` or click the 📋 menu bar icon
-4. **Select Item**: Click an item or use arrow keys + Enter to paste
-5. **Pin Items**: Click the pin icon to keep important items at the top
-6. **Search**: Type in the search box to filter history
-7. **Right-click** the 📋 icon for Quit/Preferences
-
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Cmd+Shift+V` | Open clipboard history |
-| `Enter` | Copy selected item to clipboard and paste |
-| `Escape` | Close history window |
-| `↑/↓` | Navigate history |
+- **Language**: Swift 5.9+
+- **UI**: SwiftUI
+- **Architecture**: MVVM with Combine
+- **Persistence**: UserDefaults (JSON)
+- **Global Hotkeys**: Carbon Event Manager API
+- **Menu Bar**: NSStatusItem (accessory activation policy)
 
 ## Auto-Start on Login
 
-1. Open System Settings → General → Login Items
-2. Click `+` under "Open at Login"
-3. Select `run.sh` from the WinClipMac folder
-4. The app will start automatically on login as a menu bar app
-
-## Project Structure
-
-```
-WinClipMac/
-├── Package.swift              # Swift Package Manager config
-├── build.sh                   # Build script
-├── run.sh                     # Launch script (menu bar mode)
-├── README.md                  # This file
-├── Sources/WinClipMac/
-│   ├── main.swift             # App entry point & menu bar
-│   ├── ClipboardManager.swift # Clipboard history model & persistence
-│   ├── ClipboardMonitor.swift # Clipboard change detection
-│   └── ClipboardHistoryView.swift # SwiftUI clipboard history UI
-└── Resources/
-    └── Info.plist             # App bundle configuration
-```
-
-## Technical Details
-
-- **Language**: Swift 5.9+
-- **UI Framework**: SwiftUI
-- **Architecture**: MVVM with Combine
-- **Persistence**: UserDefaults (JSON encoding)
-- **Global Hotkeys**: NSEvent global monitor
-- **Menu Bar**: NSStatusItem
-- **Activation Policy**: Accessory (menu bar only)
-
-## Permissions
-
-The app requires **Accessibility** permission to register global hotkeys. Grant it in:
-System Settings → Privacy & Security → Accessibility
+Add `run.sh` to System Settings → General → Login Items for automatic startup.
 
 ## License
 
-MIT License - Feel free to use and modify!
+[MIT License](LICENSE) - Free to use and modify.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## Changelog
+
+See [Releases](../../releases) for version history.
+
+---
+
+**Star ⭐ this repo if you find it useful!**
